@@ -9,13 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as PatientsRouteImport } from './routes/patients'
 import { Route as KnowledgeGraphRouteImport } from './routes/knowledge-graph'
 import { Route as InteractionsRouteImport } from './routes/interactions'
+import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrescriptionReviewRouteImport } from './routes/prescription.review'
 import { Route as PrescriptionNewRouteImport } from './routes/prescription.new'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PatientsRoute = PatientsRouteImport.update({
   id: '/patients',
   path: '/patients',
@@ -29,6 +36,11 @@ const KnowledgeGraphRoute = KnowledgeGraphRouteImport.update({
 const InteractionsRoute = InteractionsRouteImport.update({
   id: '/interactions',
   path: '/interactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditRoute = AuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -49,26 +61,32 @@ const PrescriptionNewRoute = PrescriptionNewRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRoute
+  '/settings': typeof SettingsRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRoute
+  '/settings': typeof SettingsRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRoute
+  '/settings': typeof SettingsRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
 }
@@ -76,40 +94,55 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/audit'
     | '/interactions'
     | '/knowledge-graph'
     | '/patients'
+    | '/settings'
     | '/prescription/new'
     | '/prescription/review'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/audit'
     | '/interactions'
     | '/knowledge-graph'
     | '/patients'
+    | '/settings'
     | '/prescription/new'
     | '/prescription/review'
   id:
     | '__root__'
     | '/'
+    | '/audit'
     | '/interactions'
     | '/knowledge-graph'
     | '/patients'
+    | '/settings'
     | '/prescription/new'
     | '/prescription/review'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuditRoute: typeof AuditRoute
   InteractionsRoute: typeof InteractionsRoute
   KnowledgeGraphRoute: typeof KnowledgeGraphRoute
   PatientsRoute: typeof PatientsRoute
+  SettingsRoute: typeof SettingsRoute
   PrescriptionNewRoute: typeof PrescriptionNewRoute
   PrescriptionReviewRoute: typeof PrescriptionReviewRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/patients': {
       id: '/patients'
       path: '/patients'
@@ -129,6 +162,13 @@ declare module '@tanstack/react-router' {
       path: '/interactions'
       fullPath: '/interactions'
       preLoaderRoute: typeof InteractionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit': {
+      id: '/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -157,9 +197,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuditRoute: AuditRoute,
   InteractionsRoute: InteractionsRoute,
   KnowledgeGraphRoute: KnowledgeGraphRoute,
   PatientsRoute: PatientsRoute,
+  SettingsRoute: SettingsRoute,
   PrescriptionNewRoute: PrescriptionNewRoute,
   PrescriptionReviewRoute: PrescriptionReviewRoute,
 }
