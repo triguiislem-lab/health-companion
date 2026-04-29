@@ -2,7 +2,9 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } f
 import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Network, ScrollText, Settings, Stethoscope, Bell, Search } from "lucide-react";
 import appCss from "../styles.css?url";
 
-const nav = [
+type NavItem = { to: "/" | "/patients" | "/prescription/new" | "/prescription/review" | "/interactions" | "/knowledge-graph" | "/audit" | "/settings"; label: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean };
+
+const nav: NavItem[] = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/patients", label: "Patients", icon: Users },
   { to: "/prescription/new", label: "New Prescription", icon: FilePlus2 },
@@ -11,7 +13,7 @@ const nav = [
   { to: "/knowledge-graph", label: "Knowledge Graph", icon: Network },
   { to: "/audit", label: "Reports & Audit", icon: ScrollText },
   { to: "/settings", label: "Settings", icon: Settings },
-] as const;
+];
 
 function NotFoundComponent() {
   return (

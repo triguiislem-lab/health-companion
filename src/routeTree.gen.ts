@@ -10,11 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PatientsRouteImport } from './routes/patients'
+import { Route as KnowledgeGraphRouteImport } from './routes/knowledge-graph'
+import { Route as InteractionsRouteImport } from './routes/interactions'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PrescriptionReviewRouteImport } from './routes/prescription.review'
+import { Route as PrescriptionNewRouteImport } from './routes/prescription.new'
 
 const PatientsRoute = PatientsRouteImport.update({
   id: '/patients',
   path: '/patients',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgeGraphRoute = KnowledgeGraphRouteImport.update({
+  id: '/knowledge-graph',
+  path: '/knowledge-graph',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InteractionsRoute = InteractionsRouteImport.update({
+  id: '/interactions',
+  path: '/interactions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,31 +36,76 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrescriptionReviewRoute = PrescriptionReviewRouteImport.update({
+  id: '/prescription/review',
+  path: '/prescription/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrescriptionNewRoute = PrescriptionNewRouteImport.update({
+  id: '/prescription/new',
+  path: '/prescription/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/interactions': typeof InteractionsRoute
+  '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRoute
+  '/prescription/new': typeof PrescriptionNewRoute
+  '/prescription/review': typeof PrescriptionReviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/interactions': typeof InteractionsRoute
+  '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRoute
+  '/prescription/new': typeof PrescriptionNewRoute
+  '/prescription/review': typeof PrescriptionReviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/interactions': typeof InteractionsRoute
+  '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRoute
+  '/prescription/new': typeof PrescriptionNewRoute
+  '/prescription/review': typeof PrescriptionReviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/patients'
+  fullPaths:
+    | '/'
+    | '/interactions'
+    | '/knowledge-graph'
+    | '/patients'
+    | '/prescription/new'
+    | '/prescription/review'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/patients'
-  id: '__root__' | '/' | '/patients'
+  to:
+    | '/'
+    | '/interactions'
+    | '/knowledge-graph'
+    | '/patients'
+    | '/prescription/new'
+    | '/prescription/review'
+  id:
+    | '__root__'
+    | '/'
+    | '/interactions'
+    | '/knowledge-graph'
+    | '/patients'
+    | '/prescription/new'
+    | '/prescription/review'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InteractionsRoute: typeof InteractionsRoute
+  KnowledgeGraphRoute: typeof KnowledgeGraphRoute
   PatientsRoute: typeof PatientsRoute
+  PrescriptionNewRoute: typeof PrescriptionNewRoute
+  PrescriptionReviewRoute: typeof PrescriptionReviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +117,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/knowledge-graph': {
+      id: '/knowledge-graph'
+      path: '/knowledge-graph'
+      fullPath: '/knowledge-graph'
+      preLoaderRoute: typeof KnowledgeGraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interactions': {
+      id: '/interactions'
+      path: '/interactions'
+      fullPath: '/interactions'
+      preLoaderRoute: typeof InteractionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,12 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prescription/review': {
+      id: '/prescription/review'
+      path: '/prescription/review'
+      fullPath: '/prescription/review'
+      preLoaderRoute: typeof PrescriptionReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prescription/new': {
+      id: '/prescription/new'
+      path: '/prescription/new'
+      fullPath: '/prescription/new'
+      preLoaderRoute: typeof PrescriptionNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InteractionsRoute: InteractionsRoute,
+  KnowledgeGraphRoute: KnowledgeGraphRoute,
   PatientsRoute: PatientsRoute,
+  PrescriptionNewRoute: PrescriptionNewRoute,
+  PrescriptionReviewRoute: PrescriptionReviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
