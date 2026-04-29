@@ -9,24 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ResourcesRouteImport } from './routes/resources'
-import { Route as ProductRouteImport } from './routes/product'
-import { Route as ContactRouteImport } from './routes/contact'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as PatientsRouteImport } from './routes/patients'
+import { Route as KnowledgeGraphRouteImport } from './routes/knowledge-graph'
+import { Route as InteractionsRouteImport } from './routes/interactions'
+import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PrescriptionReviewRouteImport } from './routes/prescription.review'
+import { Route as PrescriptionNewRouteImport } from './routes/prescription.new'
 
-const ResourcesRoute = ResourcesRouteImport.update({
-  id: '/resources',
-  path: '/resources',
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProductRoute = ProductRouteImport.update({
-  id: '/product',
-  path: '/product',
+const PatientsRoute = PatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
+const KnowledgeGraphRoute = KnowledgeGraphRouteImport.update({
+  id: '/knowledge-graph',
+  path: '/knowledge-graph',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InteractionsRoute = InteractionsRouteImport.update({
+  id: '/interactions',
+  path: '/interactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditRoute = AuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -34,62 +48,127 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrescriptionReviewRoute = PrescriptionReviewRouteImport.update({
+  id: '/prescription/review',
+  path: '/prescription/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrescriptionNewRoute = PrescriptionNewRouteImport.update({
+  id: '/prescription/new',
+  path: '/prescription/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/contact': typeof ContactRoute
-  '/product': typeof ProductRoute
-  '/resources': typeof ResourcesRoute
+  '/audit': typeof AuditRoute
+  '/interactions': typeof InteractionsRoute
+  '/knowledge-graph': typeof KnowledgeGraphRoute
+  '/patients': typeof PatientsRoute
+  '/settings': typeof SettingsRoute
+  '/prescription/new': typeof PrescriptionNewRoute
+  '/prescription/review': typeof PrescriptionReviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/contact': typeof ContactRoute
-  '/product': typeof ProductRoute
-  '/resources': typeof ResourcesRoute
+  '/audit': typeof AuditRoute
+  '/interactions': typeof InteractionsRoute
+  '/knowledge-graph': typeof KnowledgeGraphRoute
+  '/patients': typeof PatientsRoute
+  '/settings': typeof SettingsRoute
+  '/prescription/new': typeof PrescriptionNewRoute
+  '/prescription/review': typeof PrescriptionReviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/contact': typeof ContactRoute
-  '/product': typeof ProductRoute
-  '/resources': typeof ResourcesRoute
+  '/audit': typeof AuditRoute
+  '/interactions': typeof InteractionsRoute
+  '/knowledge-graph': typeof KnowledgeGraphRoute
+  '/patients': typeof PatientsRoute
+  '/settings': typeof SettingsRoute
+  '/prescription/new': typeof PrescriptionNewRoute
+  '/prescription/review': typeof PrescriptionReviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact' | '/product' | '/resources'
+  fullPaths:
+    | '/'
+    | '/audit'
+    | '/interactions'
+    | '/knowledge-graph'
+    | '/patients'
+    | '/settings'
+    | '/prescription/new'
+    | '/prescription/review'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/product' | '/resources'
-  id: '__root__' | '/' | '/contact' | '/product' | '/resources'
+  to:
+    | '/'
+    | '/audit'
+    | '/interactions'
+    | '/knowledge-graph'
+    | '/patients'
+    | '/settings'
+    | '/prescription/new'
+    | '/prescription/review'
+  id:
+    | '__root__'
+    | '/'
+    | '/audit'
+    | '/interactions'
+    | '/knowledge-graph'
+    | '/patients'
+    | '/settings'
+    | '/prescription/new'
+    | '/prescription/review'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ContactRoute: typeof ContactRoute
-  ProductRoute: typeof ProductRoute
-  ResourcesRoute: typeof ResourcesRoute
+  AuditRoute: typeof AuditRoute
+  InteractionsRoute: typeof InteractionsRoute
+  KnowledgeGraphRoute: typeof KnowledgeGraphRoute
+  PatientsRoute: typeof PatientsRoute
+  SettingsRoute: typeof SettingsRoute
+  PrescriptionNewRoute: typeof PrescriptionNewRoute
+  PrescriptionReviewRoute: typeof PrescriptionReviewRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/resources': {
-      id: '/resources'
-      path: '/resources'
-      fullPath: '/resources'
-      preLoaderRoute: typeof ResourcesRouteImport
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/product': {
-      id: '/product'
-      path: '/product'
-      fullPath: '/product'
-      preLoaderRoute: typeof ProductRouteImport
+    '/patients': {
+      id: '/patients'
+      path: '/patients'
+      fullPath: '/patients'
+      preLoaderRoute: typeof PatientsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
+    '/knowledge-graph': {
+      id: '/knowledge-graph'
+      path: '/knowledge-graph'
+      fullPath: '/knowledge-graph'
+      preLoaderRoute: typeof KnowledgeGraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interactions': {
+      id: '/interactions'
+      path: '/interactions'
+      fullPath: '/interactions'
+      preLoaderRoute: typeof InteractionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit': {
+      id: '/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -99,14 +178,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prescription/review': {
+      id: '/prescription/review'
+      path: '/prescription/review'
+      fullPath: '/prescription/review'
+      preLoaderRoute: typeof PrescriptionReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prescription/new': {
+      id: '/prescription/new'
+      path: '/prescription/new'
+      fullPath: '/prescription/new'
+      preLoaderRoute: typeof PrescriptionNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ContactRoute: ContactRoute,
-  ProductRoute: ProductRoute,
-  ResourcesRoute: ResourcesRoute,
+  AuditRoute: AuditRoute,
+  InteractionsRoute: InteractionsRoute,
+  KnowledgeGraphRoute: KnowledgeGraphRoute,
+  PatientsRoute: PatientsRoute,
+  SettingsRoute: SettingsRoute,
+  PrescriptionNewRoute: PrescriptionNewRoute,
+  PrescriptionReviewRoute: PrescriptionReviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,188 +1,114 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import heroBg from "@/assets/hero-gradient.jpg";
-import { Stethoscope, Database, Sparkles, Lightbulb, Plug, HeartHandshake, Quote, ArrowRight, ShieldCheck } from "lucide-react";
+import { ClipboardList, AlertTriangle, FileQuestion, CheckCircle2, ShieldAlert, ArrowUpRight, ArrowRight } from "lucide-react";
+import { dashboardStats, prescriptions, patients } from "@/lib/mock-data";
+import { riskMeta, statusMeta } from "@/lib/clinical-ui";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Synapse Medicine — Smarter, faster medication decisions" },
-      { name: "description", content: "React Native components for clinical decision support, drug information, and e-prescribing — built to simplify workflows for healthcare providers." },
-      { property: "og:title", content: "Synapse Medicine — Smarter, faster medication decisions" },
-      { property: "og:description", content: "Clinical decision support and drug information components for EHR and e-prescribing software." },
-    ],
-  }),
-  component: Index,
+  head: () => ({ meta: [{ title: "Dashboard — MedAssist CDSS" }] }),
+  component: Dashboard,
 });
 
-const features = [
-  { icon: Stethoscope, title: "Personalized clinical decision support", desc: "Patient-specific alerts and recommendations at the point of prescribing.", variant: "blue" },
-  { icon: Database, title: "Aggregation of official drug databases", desc: "Continuously updated, sourced from authoritative regulatory references.", variant: "pink" },
-  { icon: Sparkles, title: "Reliable AI algorithms", desc: "Validated models that surface insights without disrupting your workflow.", variant: "purple" },
+const stats = [
+  { key: "pending", label: "Pending prescriptions", value: dashboardStats.pending, icon: ClipboardList, accent: "info", trend: "+2 today" },
+  { key: "highRisk", label: "High-risk prescriptions", value: dashboardStats.highRisk, icon: ShieldAlert, accent: "critical", trend: "Needs attention" },
+  { key: "missing", label: "Missing patient data", value: dashboardStats.missingData, icon: FileQuestion, accent: "warning", trend: "Block validation" },
+  { key: "valid", label: "Recent validations", value: dashboardStats.recentValidations, icon: CheckCircle2, accent: "success", trend: "Last 24 h" },
+  { key: "alerts", label: "Critical alerts today", value: dashboardStats.criticalAlertsToday, icon: AlertTriangle, accent: "critical", trend: "Reviewed: 0" },
 ] as const;
 
-const pillars = [
-  { icon: Lightbulb, title: "Innovation", desc: "Frontier research turned into production-ready clinical tools." },
-  { icon: Plug, title: "Seamless integration", desc: "Drop-in React Native components with first-class APIs." },
-  { icon: HeartHandshake, title: "Customer care", desc: "A team of clinicians and engineers obsessed with your success." },
-];
+const accentMap = {
+  info: "bg-info-soft text-info",
+  critical: "bg-critical-soft text-critical",
+  warning: "bg-warning-soft text-warning-foreground",
+  success: "bg-success-soft text-success",
+} as const;
 
-const testimonials = [
-  { quote: "Synapse changed how our prescribers think about safety — alerts feel useful, not noisy.", author: "Dr. Amélie Laurent", role: "CMO, EHR Vendor" },
-  { quote: "Integration took days, not months. The components feel native to our product.", author: "Marcus Hill", role: "VP Engineering, Health SaaS" },
-  { quote: "The drug database coverage and update cadence is unmatched in the industry.", author: "Sara Okonkwo", role: "Head of Product, Telehealth" },
-];
+function Dashboard() {
+  const patientById = (id: string) => patients.find((p) => p.id === id);
 
-function Index() {
   return (
-    <div className="-mt-24">
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 -z-10"
-          style={{
-            backgroundImage: `url(${heroBg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-          aria-hidden
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-hero opacity-80" aria-hidden />
-        <div className="absolute -top-32 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary-glow/40 blur-3xl animate-float-slow" aria-hidden />
-
-        <div className="mx-auto max-w-6xl px-6 pt-44 pb-32 text-center">
-          <span className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-md">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            Trusted by healthcare innovators
-          </span>
-          <h1 className="animate-fade-up mt-6 text-balance text-5xl font-bold leading-[1.05] text-white sm:text-6xl md:text-7xl" style={{ animationDelay: "0.1s" }}>
-            Smarter and faster<br />medication decisions
-          </h1>
-          <p className="animate-fade-up mx-auto mt-6 max-w-2xl text-balance text-base text-white/85 sm:text-lg" style={{ animationDelay: "0.2s" }}>
-            Synapse Medicine's React Native components integrate seamlessly into your EHR,
-            e-prescribing software, or any workflow needing drug information and clinical decision support.
-          </p>
-          <div className="animate-fade-up mt-10 flex flex-wrap items-center justify-center gap-3" style={{ animationDelay: "0.3s" }}>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-foreground shadow-elegant transition-smooth hover:-translate-y-0.5 hover:shadow-glow"
-            >
-              Request a demo
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/product"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition-smooth hover:bg-white/20"
-            >
-              Explore the product
-            </Link>
-          </div>
+    <div className="p-4 lg:p-8 space-y-6">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold">Clinical dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">Wednesday, April 29, 2026 · Internal Medicine ward</p>
         </div>
+        <Link to="/prescription/new" className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-card transition-smooth hover:bg-primary/90">
+          New prescription <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
 
-        {/* Curve transition */}
-        <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden>
-          <path d="M0 80 C 360 0, 1080 0, 1440 80 L 1440 80 L 0 80 Z" fill="var(--background)" />
-        </svg>
-      </section>
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+        {stats.map((s) => (
+          <div key={s.key} className="rounded-xl border border-border bg-card p-4 shadow-card">
+            <div className="flex items-start justify-between">
+              <span className={`inline-flex h-9 w-9 items-center justify-center rounded-lg ${accentMap[s.accent]}`}>
+                <s.icon className="h-4 w-4" />
+              </span>
+              {s.accent === "critical" && s.value > 0 && (
+                <span className="inline-flex h-2 w-2 rounded-full bg-critical animate-pulse-critical" />
+              )}
+            </div>
+            <div className="mt-4 text-3xl font-bold tracking-tight">{s.value}</div>
+            <div className="text-xs font-medium text-muted-foreground mt-1">{s.label}</div>
+            <div className="text-[11px] text-muted-foreground/80 mt-2">{s.trend}</div>
+          </div>
+        ))}
+      </div>
 
-      {/* Features */}
-      <section className="bg-background py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-primary">What we do</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Make every prescription a success</h2>
+      <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+          <div>
+            <h2 className="text-base font-semibold">Recent prescription cases</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Doctor remains responsible for final validation on every case.</p>
           </div>
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {features.map((f) => {
-              const variantClass =
-                f.variant === "blue"
-                  ? "bg-gradient-card-blue"
-                  : f.variant === "pink"
-                  ? "bg-gradient-card-pink"
-                  : "bg-gradient-card-purple";
-              const iconClass =
-                f.variant === "blue"
-                  ? "bg-blue-soft text-blue-soft-foreground"
-                  : f.variant === "pink"
-                  ? "bg-pink-soft text-pink-soft-foreground"
-                  : "bg-purple-soft text-purple-soft-foreground";
-              return (
-                <div
-                  key={f.title}
-                  className={`group rounded-3xl border border-border/60 p-7 shadow-soft transition-smooth hover:-translate-y-1 hover:shadow-elegant ${variantClass}`}
-                >
-                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl ${iconClass}`}>
-                    <f.icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mt-5 text-lg font-semibold">{f.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
-                </div>
-              );
-            })}
-          </div>
+          <Link to="/prescription/review" className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1">
+            View all <ArrowUpRight className="h-3 w-3" />
+          </Link>
         </div>
-      </section>
-
-      {/* Pillars */}
-      <section className="bg-gradient-soft py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-primary">Our approach</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Enabling clinical decision support for medication success</h2>
-          </div>
-          <div className="mt-14 grid gap-8 md:grid-cols-3">
-            {pillars.map((p) => (
-              <div key={p.title} className="flex flex-col items-start">
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <p.icon className="h-6 w-6" />
-                </div>
-                <h3 className="mt-5 text-lg font-semibold">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
-              </div>
-            ))}
-          </div>
+        <div className="overflow-x-auto scrollbar-thin">
+          <table className="w-full text-sm">
+            <thead className="text-left text-xs uppercase tracking-wider text-muted-foreground bg-muted/40">
+              <tr>
+                <th className="px-5 py-3 font-semibold">Patient</th>
+                <th className="px-5 py-3 font-semibold">Diagnosis</th>
+                <th className="px-5 py-3 font-semibold">Status</th>
+                <th className="px-5 py-3 font-semibold">Risk</th>
+                <th className="px-5 py-3 font-semibold">Last update</th>
+                <th className="px-5 py-3 font-semibold text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {prescriptions.map((rx) => {
+                const p = patientById(rx.patientId);
+                const stMeta = statusMeta[rx.status];
+                const rkMeta = riskMeta[rx.risk];
+                return (
+                  <tr key={rx.id} className="hover:bg-muted/40 transition-smooth">
+                    <td className="px-5 py-3.5">
+                      <div className="font-semibold">{p?.name}</div>
+                      <div className="text-xs text-muted-foreground">{p?.id} · {p?.age}{p?.sex} · {rx.id}</div>
+                    </td>
+                    <td className="px-5 py-3.5">{rx.diagnosis}</td>
+                    <td className="px-5 py-3.5">
+                      <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${stMeta.cls}`}>{stMeta.label}</span>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${rkMeta.cls}`}>{rkMeta.label}</span>
+                    </td>
+                    <td className="px-5 py-3.5 text-muted-foreground">{rx.lastUpdate}</td>
+                    <td className="px-5 py-3.5 text-right">
+                      <Link to="/prescription/review" className="inline-flex items-center gap-1 rounded-lg border border-input bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted transition-smooth">
+                        Review <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="bg-background py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-primary">Customers</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Don't just take our word for it</h2>
-          </div>
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <figure key={t.author} className="rounded-3xl border border-border/60 bg-card p-7 shadow-soft transition-smooth hover:shadow-elegant">
-                <Quote className="h-6 w-6 text-primary/40" />
-                <blockquote className="mt-4 text-sm leading-relaxed text-foreground">"{t.quote}"</blockquote>
-                <figcaption className="mt-6">
-                  <div className="text-sm font-semibold">{t.author}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="px-6 pb-24">
-        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-gradient-hero p-12 text-center shadow-elegant sm:p-16">
-          <div className="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary-glow/40 blur-3xl" aria-hidden />
-          <h2 className="relative text-balance text-4xl font-bold text-white sm:text-5xl">Ready to power smarter prescriptions?</h2>
-          <p className="relative mx-auto mt-4 max-w-xl text-white/85">
-            Talk to our team about integrating Synapse into your healthcare product.
-          </p>
-          <div className="relative mt-8">
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-foreground shadow-elegant transition-smooth hover:-translate-y-0.5"
-            >
-              Request a demo <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 }
