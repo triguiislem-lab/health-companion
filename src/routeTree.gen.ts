@@ -17,6 +17,7 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrescriptionReviewRouteImport } from './routes/prescription.review'
 import { Route as PrescriptionNewRouteImport } from './routes/prescription.new'
+import { Route as PatientsPatientIdRouteImport } from './routes/patients.$patientId'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -58,14 +59,20 @@ const PrescriptionNewRoute = PrescriptionNewRouteImport.update({
   path: '/prescription/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PatientsPatientIdRoute = PatientsPatientIdRouteImport.update({
+  id: '/$patientId',
+  path: '/$patientId',
+  getParentRoute: () => PatientsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/knowledge-graph': typeof KnowledgeGraphRoute
-  '/patients': typeof PatientsRoute
+  '/patients': typeof PatientsRouteWithChildren
   '/settings': typeof SettingsRoute
+  '/patients/$patientId': typeof PatientsPatientIdRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
 }
@@ -74,8 +81,9 @@ export interface FileRoutesByTo {
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/knowledge-graph': typeof KnowledgeGraphRoute
-  '/patients': typeof PatientsRoute
+  '/patients': typeof PatientsRouteWithChildren
   '/settings': typeof SettingsRoute
+  '/patients/$patientId': typeof PatientsPatientIdRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
 }
@@ -85,8 +93,9 @@ export interface FileRoutesById {
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/knowledge-graph': typeof KnowledgeGraphRoute
-  '/patients': typeof PatientsRoute
+  '/patients': typeof PatientsRouteWithChildren
   '/settings': typeof SettingsRoute
+  '/patients/$patientId': typeof PatientsPatientIdRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/knowledge-graph'
     | '/patients'
     | '/settings'
+    | '/patients/$patientId'
     | '/prescription/new'
     | '/prescription/review'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/knowledge-graph'
     | '/patients'
     | '/settings'
+    | '/patients/$patientId'
     | '/prescription/new'
     | '/prescription/review'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/knowledge-graph'
     | '/patients'
     | '/settings'
+    | '/patients/$patientId'
     | '/prescription/new'
     | '/prescription/review'
   fileRoutesById: FileRoutesById
@@ -128,7 +140,7 @@ export interface RootRouteChildren {
   AuditRoute: typeof AuditRoute
   InteractionsRoute: typeof InteractionsRoute
   KnowledgeGraphRoute: typeof KnowledgeGraphRoute
-  PatientsRoute: typeof PatientsRoute
+  PatientsRoute: typeof PatientsRouteWithChildren
   SettingsRoute: typeof SettingsRoute
   PrescriptionNewRoute: typeof PrescriptionNewRoute
   PrescriptionReviewRoute: typeof PrescriptionReviewRoute
@@ -192,15 +204,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrescriptionNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/patients/$patientId': {
+      id: '/patients/$patientId'
+      path: '/$patientId'
+      fullPath: '/patients/$patientId'
+      preLoaderRoute: typeof PatientsPatientIdRouteImport
+      parentRoute: typeof PatientsRoute
+    }
   }
 }
+
+interface PatientsRouteChildren {
+  PatientsPatientIdRoute: typeof PatientsPatientIdRoute
+}
+
+const PatientsRouteChildren: PatientsRouteChildren = {
+  PatientsPatientIdRoute: PatientsPatientIdRoute,
+}
+
+const PatientsRouteWithChildren = PatientsRoute._addFileChildren(
+  PatientsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditRoute: AuditRoute,
   InteractionsRoute: InteractionsRoute,
   KnowledgeGraphRoute: KnowledgeGraphRoute,
-  PatientsRoute: PatientsRoute,
+  PatientsRoute: PatientsRouteWithChildren,
   SettingsRoute: SettingsRoute,
   PrescriptionNewRoute: PrescriptionNewRoute,
   PrescriptionReviewRoute: PrescriptionReviewRoute,
