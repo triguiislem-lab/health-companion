@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Filter } from "lucide-react";
-import { prescriptions, patients } from "@/lib/mock-data";
+import { prescriptions } from "@/lib/mock-data";
+import { usePatientStore } from "@/lib/stores/patient-store";
 import { riskMeta, statusMeta } from "@/lib/clinical-ui";
 
 export const Route = createFileRoute("/prescription/review")({
@@ -9,6 +10,7 @@ export const Route = createFileRoute("/prescription/review")({
 });
 
 function PrescriptionReview() {
+  const patients = usePatientStore((s) => s.patients);
   return (
     <div className="p-4 lg:p-8 space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -23,7 +25,7 @@ function PrescriptionReview() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         {prescriptions.map((rx) => {
-          const p = patients.find((x) => x.id === rx.patientId)!;
+          const p = patients.find((x) => x.id === rx.patientId);
           const stMeta = statusMeta[rx.status];
           const rkMeta = riskMeta[rx.risk];
           return (
@@ -31,7 +33,7 @@ function PrescriptionReview() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-xs text-muted-foreground font-mono">{rx.id} · {rx.lastUpdate}</div>
-                  <div className="font-semibold mt-0.5">{p.name} <span className="text-muted-foreground font-normal">({p.age}{p.sex})</span></div>
+                  <div className="font-semibold mt-0.5">{p?.name ?? "Unknown patient"} {p && <span className="text-muted-foreground font-normal">({p.age}{p.sex})</span>}</div>
                   <div className="text-sm text-muted-foreground mt-1">{rx.diagnosis}</div>
                 </div>
                 <div className="flex flex-col items-end gap-1.5">
@@ -51,7 +53,7 @@ function PrescriptionReview() {
               )}
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-xs text-muted-foreground">{rx.doctor}</div>
-                <Link to="/prescription/new" className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-smooth">
+                <Link to="/prescription/new" search={p ? { patientId: p.id } : {}} className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-smooth">
                   Open <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
