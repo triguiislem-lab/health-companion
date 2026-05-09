@@ -25,7 +25,7 @@ function PrescriptionReview() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         {prescriptions.map((rx) => {
-          const p = patients.find((x) => x.id === rx.patientId)!;
+          const p = patients.find((x) => x.id === rx.patientId);
           const stMeta = statusMeta[rx.status];
           const rkMeta = riskMeta[rx.risk];
           return (
@@ -33,7 +33,7 @@ function PrescriptionReview() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-xs text-muted-foreground font-mono">{rx.id} · {rx.lastUpdate}</div>
-                  <div className="font-semibold mt-0.5">{p.name} <span className="text-muted-foreground font-normal">({p.age}{p.sex})</span></div>
+                  <div className="font-semibold mt-0.5">{p?.name ?? "Unknown patient"} {p && <span className="text-muted-foreground font-normal">({p.age}{p.sex})</span>}</div>
                   <div className="text-sm text-muted-foreground mt-1">{rx.diagnosis}</div>
                 </div>
                 <div className="flex flex-col items-end gap-1.5">
