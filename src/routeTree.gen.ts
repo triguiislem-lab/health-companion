@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrescriptionReviewRouteImport } from './routes/prescription.review'
 import { Route as PrescriptionNewRouteImport } from './routes/prescription.new'
 import { Route as PatientsPatientIdRouteImport } from './routes/patients.$patientId'
+import { Route as PrescriptionRxIdOrdonnanceRouteImport } from './routes/prescription.$rxId.ordonnance'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -64,6 +65,12 @@ const PatientsPatientIdRoute = PatientsPatientIdRouteImport.update({
   path: '/$patientId',
   getParentRoute: () => PatientsRoute,
 } as any)
+const PrescriptionRxIdOrdonnanceRoute =
+  PrescriptionRxIdOrdonnanceRouteImport.update({
+    id: '/prescription/$rxId/ordonnance',
+    path: '/prescription/$rxId/ordonnance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/patients/$patientId': typeof PatientsPatientIdRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
+  '/prescription/$rxId/ordonnance': typeof PrescriptionRxIdOrdonnanceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +94,7 @@ export interface FileRoutesByTo {
   '/patients/$patientId': typeof PatientsPatientIdRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
+  '/prescription/$rxId/ordonnance': typeof PrescriptionRxIdOrdonnanceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +107,7 @@ export interface FileRoutesById {
   '/patients/$patientId': typeof PatientsPatientIdRoute
   '/prescription/new': typeof PrescriptionNewRoute
   '/prescription/review': typeof PrescriptionReviewRoute
+  '/prescription/$rxId/ordonnance': typeof PrescriptionRxIdOrdonnanceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/patients/$patientId'
     | '/prescription/new'
     | '/prescription/review'
+    | '/prescription/$rxId/ordonnance'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +133,7 @@ export interface FileRouteTypes {
     | '/patients/$patientId'
     | '/prescription/new'
     | '/prescription/review'
+    | '/prescription/$rxId/ordonnance'
   id:
     | '__root__'
     | '/'
@@ -133,6 +145,7 @@ export interface FileRouteTypes {
     | '/patients/$patientId'
     | '/prescription/new'
     | '/prescription/review'
+    | '/prescription/$rxId/ordonnance'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,6 +157,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   PrescriptionNewRoute: typeof PrescriptionNewRoute
   PrescriptionReviewRoute: typeof PrescriptionReviewRoute
+  PrescriptionRxIdOrdonnanceRoute: typeof PrescriptionRxIdOrdonnanceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -211,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientsPatientIdRouteImport
       parentRoute: typeof PatientsRoute
     }
+    '/prescription/$rxId/ordonnance': {
+      id: '/prescription/$rxId/ordonnance'
+      path: '/prescription/$rxId/ordonnance'
+      fullPath: '/prescription/$rxId/ordonnance'
+      preLoaderRoute: typeof PrescriptionRxIdOrdonnanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -235,6 +256,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   PrescriptionNewRoute: PrescriptionNewRoute,
   PrescriptionReviewRoute: PrescriptionReviewRoute,
+  PrescriptionRxIdOrdonnanceRoute: PrescriptionRxIdOrdonnanceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

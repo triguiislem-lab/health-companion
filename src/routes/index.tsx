@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ClipboardList, AlertTriangle, FileQuestion, CheckCircle2, ShieldAlert, ArrowUpRight, ArrowRight } from "lucide-react";
-import { dashboardStats, prescriptions, patients } from "@/lib/mock-data";
+import { dashboardStats, prescriptions } from "@/lib/mock-data";
+import { usePatientStore } from "@/lib/stores/patient-store";
 import { riskMeta, statusMeta } from "@/lib/clinical-ui";
 
 export const Route = createFileRoute("/")({
@@ -24,6 +25,7 @@ const accentMap = {
 } as const;
 
 function Dashboard() {
+  const patients = usePatientStore((s) => s.patients);
   const patientById = (id: string) => patients.find((p) => p.id === id);
 
   return (

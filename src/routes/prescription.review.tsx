@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Filter } from "lucide-react";
-import { prescriptions, patients } from "@/lib/mock-data";
+import { prescriptions } from "@/lib/mock-data";
+import { usePatientStore } from "@/lib/stores/patient-store";
 import { riskMeta, statusMeta } from "@/lib/clinical-ui";
 
 export const Route = createFileRoute("/prescription/review")({
@@ -9,6 +10,7 @@ export const Route = createFileRoute("/prescription/review")({
 });
 
 function PrescriptionReview() {
+  const patients = usePatientStore((s) => s.patients);
   return (
     <div className="p-4 lg:p-8 space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
