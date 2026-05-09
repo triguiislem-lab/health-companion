@@ -53,7 +53,7 @@ function PrescriptionReview() {
               )}
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-xs text-muted-foreground">{rx.doctor}</div>
-                <Link to="/prescription/new" className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-smooth">
+                <Link to="/prescription/new" search={p ? { patientId: p.id } : {}} className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-smooth">
                   Open <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
