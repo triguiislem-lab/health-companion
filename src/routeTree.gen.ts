@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as PatientsRouteImport } from './routes/patients'
-import { Route as KnowledgeGraphRouteImport } from './routes/knowledge-graph'
 import { Route as InteractionsRouteImport } from './routes/interactions'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,11 +27,6 @@ const SettingsRoute = SettingsRouteImport.update({
 const PatientsRoute = PatientsRouteImport.update({
   id: '/patients',
   path: '/patients',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgeGraphRoute = KnowledgeGraphRouteImport.update({
-  id: '/knowledge-graph',
-  path: '/knowledge-graph',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InteractionsRoute = InteractionsRouteImport.update({
@@ -76,7 +70,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
-  '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/patients/$patientId': typeof PatientsPatientIdRoute
@@ -88,7 +81,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
-  '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/patients/$patientId': typeof PatientsPatientIdRoute
@@ -101,7 +93,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
-  '/knowledge-graph': typeof KnowledgeGraphRoute
   '/patients': typeof PatientsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/patients/$patientId': typeof PatientsPatientIdRoute
@@ -115,7 +106,6 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/interactions'
-    | '/knowledge-graph'
     | '/patients'
     | '/settings'
     | '/patients/$patientId'
@@ -127,7 +117,6 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/interactions'
-    | '/knowledge-graph'
     | '/patients'
     | '/settings'
     | '/patients/$patientId'
@@ -139,7 +128,6 @@ export interface FileRouteTypes {
     | '/'
     | '/audit'
     | '/interactions'
-    | '/knowledge-graph'
     | '/patients'
     | '/settings'
     | '/patients/$patientId'
@@ -152,7 +140,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditRoute: typeof AuditRoute
   InteractionsRoute: typeof InteractionsRoute
-  KnowledgeGraphRoute: typeof KnowledgeGraphRoute
   PatientsRoute: typeof PatientsRouteWithChildren
   SettingsRoute: typeof SettingsRoute
   PrescriptionNewRoute: typeof PrescriptionNewRoute
@@ -174,13 +161,6 @@ declare module '@tanstack/react-router' {
       path: '/patients'
       fullPath: '/patients'
       preLoaderRoute: typeof PatientsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/knowledge-graph': {
-      id: '/knowledge-graph'
-      path: '/knowledge-graph'
-      fullPath: '/knowledge-graph'
-      preLoaderRoute: typeof KnowledgeGraphRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/interactions': {
@@ -251,7 +231,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditRoute: AuditRoute,
   InteractionsRoute: InteractionsRoute,
-  KnowledgeGraphRoute: KnowledgeGraphRoute,
   PatientsRoute: PatientsRouteWithChildren,
   SettingsRoute: SettingsRoute,
   PrescriptionNewRoute: PrescriptionNewRoute,
@@ -261,3 +240,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
