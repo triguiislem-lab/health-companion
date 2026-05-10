@@ -1,16 +1,18 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Network, ScrollText, Settings, Stethoscope, Bell, Search } from "lucide-react";
+import { Outlet, Link, Navigate, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Pill, ScrollText, Settings, Stethoscope, Bell, Search, CalendarClock, LogOut } from "lucide-react";
 import appCss from "../styles.css?url";
+import { useAuthStore } from "@/lib/stores/auth-store";
 
-type NavItem = { to: "/" | "/patients" | "/prescription/new" | "/prescription/review" | "/interactions" | "/knowledge-graph" | "/audit" | "/settings"; label: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean };
+type NavItem = { to: string; label: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean };
 
 const nav: NavItem[] = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/patients", label: "Patients", icon: Users },
+  { to: "/consultations", label: "Consultations", icon: CalendarClock },
   { to: "/prescription/new", label: "New Prescription", icon: FilePlus2 },
   { to: "/prescription/review", label: "Prescription Review", icon: ClipboardCheck },
   { to: "/interactions", label: "Drug Interactions", icon: Activity },
-  { to: "/knowledge-graph", label: "Knowledge Graph", icon: Network },
+  { to: "/medicines", label: "Médicaments TN", icon: Pill },
   { to: "/audit", label: "Reports & Audit", icon: ScrollText },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
@@ -22,9 +24,7 @@ function NotFoundComponent() {
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
         <div className="mt-6">
-          <Link to="/" className="inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-            Go to dashboard
-          </Link>
+          <Link to="/" className="inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">Go to dashboard</Link>
         </div>
       </div>
     </div>
@@ -62,8 +62,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function Sidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   const isActive = (to: string, exact?: boolean) =>
-    exact ? pathname === to : pathname === to || pathname.startsWith(to + "/") || pathname === to;
+    exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
 
   return (
     <aside className="hidden lg:flex w-64 flex-col border-r border-sidebar-border bg-sidebar">
@@ -84,11 +86,9 @@ function Sidebar() {
             return (
               <li key={n.to}>
                 <Link
-                  to={n.to}
+                  to={n.to as never}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-smooth ${
-                    active
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent/50"
+                    active ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold" : "text-sidebar-foreground hover:bg-sidebar-accent/50"
                   }`}
                 >
                   <n.icon className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
@@ -101,11 +101,12 @@ function Sidebar() {
       </nav>
       <div className="border-t border-sidebar-border p-4">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-full bg-primary-soft text-primary flex items-center justify-center font-semibold text-sm">JC</div>
-          <div className="min-w-0">
-            <div className="text-sm font-semibold truncate">Dr. Jordan Chen</div>
-            <div className="text-xs text-muted-foreground truncate">Internal Medicine</div>
+          <div className="h-9 w-9 rounded-full bg-primary-soft text-primary flex items-center justify-center font-semibold text-sm">{user?.initials ?? "?"}</div>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-semibold truncate">{user?.name ?? "Guest"}</div>
+            <div className="text-xs text-muted-foreground truncate">{user?.specialty ?? ""}</div>
           </div>
+          <button onClick={logout} title="Sign out" className="rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground"><LogOut className="h-4 w-4" /></button>
         </div>
       </div>
     </aside>
@@ -113,6 +114,8 @@ function Sidebar() {
 }
 
 function Topbar() {
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/85 backdrop-blur px-4 lg:px-8">
       <div className="lg:hidden flex items-center gap-2 font-semibold">
@@ -129,6 +132,9 @@ function Topbar() {
           <Bell className="h-4 w-4" />
           <span className="absolute -top-1 -right-1 h-4 min-w-[16px] rounded-full bg-critical px-1 text-[10px] font-semibold text-critical-foreground flex items-center justify-center animate-pulse-critical">2</span>
         </button>
+        <button onClick={logout} className="lg:hidden inline-flex items-center gap-1.5 rounded-lg border border-input bg-card px-2.5 py-1.5 text-xs font-semibold hover:bg-muted" title={user?.name}>
+          <LogOut className="h-3.5 w-3.5" /> Sign out
+        </button>
       </div>
     </header>
   );
@@ -143,7 +149,7 @@ function MobileNav() {
           const active = n.exact ? pathname === n.to : pathname === n.to || pathname.startsWith(n.to + "/");
           return (
             <li key={n.to}>
-              <Link to={n.to} className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-smooth ${active ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-muted"}`}>
+              <Link to={n.to as never} className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-smooth ${active ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-muted"}`}>
                 <n.icon className="h-3.5 w-3.5" />
                 {n.label}
               </Link>
@@ -156,6 +162,15 @@ function MobileNav() {
 }
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const user = useAuthStore((s) => s.user);
+
+  // Login page: render outlet without app chrome
+  if (pathname === "/login") return <Outlet />;
+
+  // Auth guard
+  if (!user) return <Navigate to="/login" />;
+
   return (
     <div className="flex min-h-screen w-full">
       <Sidebar />
