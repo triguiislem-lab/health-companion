@@ -86,7 +86,7 @@ function Sidebar() {
             return (
               <li key={n.to}>
                 <Link
-                  to={n.to}
+                  to={n.to as never}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-smooth ${
                     active ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold" : "text-sidebar-foreground hover:bg-sidebar-accent/50"
                   }`}
@@ -149,7 +149,7 @@ function MobileNav() {
           const active = n.exact ? pathname === n.to : pathname === n.to || pathname.startsWith(n.to + "/");
           return (
             <li key={n.to}>
-              <Link to={n.to} className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-smooth ${active ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-muted"}`}>
+              <Link to={n.to as never} className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-smooth ${active ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-muted"}`}>
                 <n.icon className="h-3.5 w-3.5" />
                 {n.label}
               </Link>
