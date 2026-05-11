@@ -1,8 +1,11 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { z } from "zod";
-import { ArrowLeft, Printer, Stethoscope, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Printer, Stethoscope, ShieldCheck, Building2, User as UserIcon } from "lucide-react";
 import { prescriptions } from "@/lib/mock-data";
 import { usePatientStore } from "@/lib/stores/patient-store";
+import { SendPrescriptionDialog } from "@/components/clinical/SendPrescriptionDialog";
+import type { DispatchTarget } from "@/lib/stores/pharmacy-store";
 
 const searchSchema = z.object({ patientId: z.string().optional() });
 
@@ -25,6 +28,7 @@ function OrdonnancePage() {
   const rx = prescriptions.find((p) => p.id === rxId);
   const fallbackPatientId = patientId ?? rx?.patientId;
   const patient = usePatientStore((s) => s.patients.find((p) => p.id === fallbackPatientId));
+  const [sendOpen, setSendOpen] = useState<DispatchTarget | null>(null);
 
   if (!rx || !patient) throw notFound();
 
@@ -33,13 +37,21 @@ function OrdonnancePage() {
   return (
     <div className="p-4 lg:p-8">
       <div className="mx-auto max-w-3xl space-y-4">
-        <div className="flex items-center justify-between print:hidden">
+        <div className="flex flex-wrap items-center justify-between gap-2 print:hidden">
           <Link to="/patients/$patientId" params={{ patientId: patient.id }} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-4 w-4" /> Back to patient
           </Link>
-          <button onClick={() => window.print()} className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-            <Printer className="h-4 w-4" /> Print / save PDF
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button onClick={() => setSendOpen("pharmacist")} className="inline-flex items-center gap-1.5 rounded-lg border border-input bg-card px-3 py-2 text-sm font-semibold hover:bg-muted">
+              <Building2 className="h-4 w-4" /> Envoyer au pharmacien
+            </button>
+            <button onClick={() => setSendOpen("patient")} className="inline-flex items-center gap-1.5 rounded-lg border border-input bg-card px-3 py-2 text-sm font-semibold hover:bg-muted">
+              <UserIcon className="h-4 w-4" /> Envoyer au patient
+            </button>
+            <button onClick={() => window.print()} className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+              <Printer className="h-4 w-4" /> Imprimer / PDF
+            </button>
+          </div>
         </div>
 
         <article className="rounded-xl border border-border bg-card shadow-card p-8 print:shadow-none print:border-0 print:p-0">
@@ -110,6 +122,17 @@ function OrdonnancePage() {
           </footer>
         </article>
       </div>
+
+      {sendOpen && (
+        <SendPrescriptionDialog
+          open
+          onClose={() => setSendOpen(null)}
+          rxId={rx.id}
+          patientId={patient.id}
+          patientName={patient.name}
+          defaultTarget={sendOpen}
+        />
+      )}
     </div>
   );
 }

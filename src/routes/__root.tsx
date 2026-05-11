@@ -1,5 +1,5 @@
 import { Outlet, Link, Navigate, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Pill, ScrollText, Settings, Stethoscope, Bell, Search, CalendarClock, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Pill, ScrollText, Settings, Stethoscope, Bell, Search, CalendarClock, LogOut, Building2 } from "lucide-react";
 import appCss from "../styles.css?url";
 import { useAuthStore } from "@/lib/stores/auth-store";
 
@@ -11,6 +11,7 @@ const nav: NavItem[] = [
   { to: "/consultations", label: "Consultations", icon: CalendarClock },
   { to: "/prescription/new", label: "New Prescription", icon: FilePlus2 },
   { to: "/prescription/review", label: "Prescription Review", icon: ClipboardCheck },
+  { to: "/pharmacy", label: "Pharmacie", icon: Building2 },
   { to: "/interactions", label: "Drug Interactions", icon: Activity },
   { to: "/medicines", label: "Médicaments TN", icon: Pill },
   { to: "/audit", label: "Reports & Audit", icon: ScrollText },

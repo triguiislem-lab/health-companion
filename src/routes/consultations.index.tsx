@@ -4,7 +4,7 @@ import { Plus, Search, CalendarClock, Mic, Trash2, Pencil, ChevronRight, Stethos
 import { useConsultationStore, type ConsultationStatus } from "@/lib/stores/consultation-store";
 import { ConsultationFormDialog } from "@/components/clinical/ConsultationFormDialog";
 
-export const Route = createFileRoute("/consultations")({
+export const Route = createFileRoute("/consultations/")({
   head: () => ({ meta: [{ title: "Consultations — MedAssist CDSS" }] }),
   component: ConsultationsPage,
 });
