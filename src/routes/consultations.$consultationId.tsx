@@ -163,21 +163,27 @@ function ConsultationDetailPage() {
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-3">
-              {!recording ? (
-                <button onClick={startRecording} className="inline-flex items-center gap-2 rounded-lg bg-critical px-4 py-2.5 text-sm font-semibold text-critical-foreground hover:bg-critical/90">
+              {!recording && consultation.status !== "completed" && (
+                <button onClick={startRecording} className="inline-flex items-center gap-2 rounded-lg bg-success px-4 py-2.5 text-sm font-semibold text-success-foreground hover:bg-success/90 shadow-card">
                   <Mic className="h-4 w-4" /> Démarrer la consultation
                 </button>
-              ) : (
+              )}
+              {recording && (
                 <>
                   <button onClick={togglePause} className="inline-flex items-center gap-2 rounded-lg border border-input bg-card px-3 py-2 text-sm font-semibold hover:bg-muted">
                     {paused ? <><Play className="h-4 w-4" /> Reprendre</> : <><Pause className="h-4 w-4" /> Pause</>}
                   </button>
-                  <button onClick={stopRecording} className="inline-flex items-center gap-2 rounded-lg bg-foreground text-background px-3 py-2 text-sm font-semibold hover:bg-foreground/90">
-                    <Square className="h-4 w-4" /> Arrêter
+                  <button onClick={stopRecording} className="inline-flex items-center gap-2 rounded-lg bg-critical text-critical-foreground px-4 py-2.5 text-sm font-semibold hover:bg-critical/90 shadow-card">
+                    <Square className="h-4 w-4" /> Terminer la consultation
                   </button>
                 </>
               )}
-              <div className="font-mono text-2xl tabular-nums">{fmtDuration(elapsed || consultation.recordingDurationSec || 0)}</div>
+              {!recording && consultation.status === "completed" && (
+                <button onClick={startRecording} className="inline-flex items-center gap-2 rounded-lg border border-input bg-card px-3 py-2 text-sm font-semibold hover:bg-muted">
+                  <Mic className="h-4 w-4" /> Reprendre un nouvel enregistrement
+                </button>
+              )}
+              <div className="font-mono text-2xl tabular-nums ml-auto">{fmtDuration(elapsed || consultation.recordingDurationSec || 0)}</div>
             </div>
 
             {recError && <div className="mt-3 rounded-lg border border-critical/30 bg-critical-soft p-2.5 text-xs text-critical">{recError}</div>}
