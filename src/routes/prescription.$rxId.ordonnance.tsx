@@ -1,8 +1,11 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { z } from "zod";
-import { ArrowLeft, Printer, Stethoscope, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Printer, Stethoscope, ShieldCheck, Building2, User as UserIcon } from "lucide-react";
 import { prescriptions } from "@/lib/mock-data";
 import { usePatientStore } from "@/lib/stores/patient-store";
+import { SendPrescriptionDialog } from "@/components/clinical/SendPrescriptionDialog";
+import type { DispatchTarget } from "@/lib/stores/pharmacy-store";
 
 const searchSchema = z.object({ patientId: z.string().optional() });
 
