@@ -13,6 +13,7 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as PharmacyRouteImport } from './routes/pharmacy'
 import { Route as PatientsRouteImport } from './routes/patients'
 import { Route as MedicinesRouteImport } from './routes/medicines'
+import { Route as MedicineContributionsRouteImport } from './routes/medicine-contributions'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InteractionsRouteImport } from './routes/interactions'
 import { Route as AuditRouteImport } from './routes/audit'
@@ -42,6 +43,11 @@ const PatientsRoute = PatientsRouteImport.update({
 const MedicinesRoute = MedicinesRouteImport.update({
   id: '/medicines',
   path: '/medicines',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicineContributionsRoute = MedicineContributionsRouteImport.update({
+  id: '/medicine-contributions',
+  path: '/medicine-contributions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/login': typeof LoginRoute
+  '/medicine-contributions': typeof MedicineContributionsRoute
   '/medicines': typeof MedicinesRoute
   '/patients': typeof PatientsRouteWithChildren
   '/pharmacy': typeof PharmacyRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/login': typeof LoginRoute
+  '/medicine-contributions': typeof MedicineContributionsRoute
   '/medicines': typeof MedicinesRoute
   '/patients': typeof PatientsRouteWithChildren
   '/pharmacy': typeof PharmacyRoute
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/login': typeof LoginRoute
+  '/medicine-contributions': typeof MedicineContributionsRoute
   '/medicines': typeof MedicinesRoute
   '/patients': typeof PatientsRouteWithChildren
   '/pharmacy': typeof PharmacyRoute
@@ -153,6 +162,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/interactions'
     | '/login'
+    | '/medicine-contributions'
     | '/medicines'
     | '/patients'
     | '/pharmacy'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/interactions'
     | '/login'
+    | '/medicine-contributions'
     | '/medicines'
     | '/patients'
     | '/pharmacy'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/interactions'
     | '/login'
+    | '/medicine-contributions'
     | '/medicines'
     | '/patients'
     | '/pharmacy'
@@ -202,6 +214,7 @@ export interface RootRouteChildren {
   AuditRoute: typeof AuditRoute
   InteractionsRoute: typeof InteractionsRoute
   LoginRoute: typeof LoginRoute
+  MedicineContributionsRoute: typeof MedicineContributionsRoute
   MedicinesRoute: typeof MedicinesRoute
   PatientsRoute: typeof PatientsRouteWithChildren
   PharmacyRoute: typeof PharmacyRoute
@@ -241,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/medicines'
       fullPath: '/medicines'
       preLoaderRoute: typeof MedicinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medicine-contributions': {
+      id: '/medicine-contributions'
+      path: '/medicine-contributions'
+      fullPath: '/medicine-contributions'
+      preLoaderRoute: typeof MedicineContributionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -333,6 +353,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuditRoute: AuditRoute,
   InteractionsRoute: InteractionsRoute,
   LoginRoute: LoginRoute,
+  MedicineContributionsRoute: MedicineContributionsRoute,
   MedicinesRoute: MedicinesRoute,
   PatientsRoute: PatientsRouteWithChildren,
   PharmacyRoute: PharmacyRoute,
