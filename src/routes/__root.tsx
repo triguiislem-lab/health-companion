@@ -11,6 +11,7 @@ const nav: NavItem[] = [
   { to: "/consultations", label: "Consultations", icon: CalendarClock },
   { to: "/prescription/new", label: "New Prescription", icon: FilePlus2 },
   { to: "/prescription/review", label: "Prescription Review", icon: ClipboardCheck },
+  { to: "/pharmacy", label: "Pharmacie", icon: Building2 },
   { to: "/interactions", label: "Drug Interactions", icon: Activity },
   { to: "/medicines", label: "Médicaments TN", icon: Pill },
   { to: "/audit", label: "Reports & Audit", icon: ScrollText },
