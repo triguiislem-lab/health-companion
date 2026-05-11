@@ -29,7 +29,6 @@ function OrdonnancePage() {
   const fallbackPatientId = patientId ?? rx?.patientId;
   const patient = usePatientStore((s) => s.patients.find((p) => p.id === fallbackPatientId));
   const [sendOpen, setSendOpen] = useState<DispatchTarget | null>(null);
-  const patient = usePatientStore((s) => s.patients.find((p) => p.id === fallbackPatientId));
 
   if (!rx || !patient) throw notFound();
 
