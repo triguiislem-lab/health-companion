@@ -1,5 +1,5 @@
 import { Outlet, Link, Navigate, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Pill, ScrollText, Settings, Stethoscope, Bell, Search, CalendarClock, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Pill, ScrollText, Settings, Stethoscope, Bell, Search, CalendarClock, LogOut, Building2 } from "lucide-react";
 import appCss from "../styles.css?url";
 import { useAuthStore } from "@/lib/stores/auth-store";
 
