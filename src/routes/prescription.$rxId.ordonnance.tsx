@@ -122,6 +122,17 @@ function OrdonnancePage() {
           </footer>
         </article>
       </div>
+
+      {sendOpen && (
+        <SendPrescriptionDialog
+          open
+          onClose={() => setSendOpen(null)}
+          rxId={rx.id}
+          patientId={patient.id}
+          patientName={patient.name}
+          defaultTarget={sendOpen}
+        />
+      )}
     </div>
   );
 }
