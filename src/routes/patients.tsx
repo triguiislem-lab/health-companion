@@ -59,9 +59,10 @@ function PatientsPage() {
           <p className="text-sm text-muted-foreground">No patients match your search.</p>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((p) => (
-            <div key={p.id} className="rounded-xl border border-border bg-card p-5 shadow-card transition-smooth hover:shadow-elevated">
+        <>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 items-stretch">
+          {paged.map((p) => (
+            <div key={p.id} className="flex flex-col h-full rounded-xl border border-border bg-card p-5 shadow-card transition-smooth hover:shadow-elevated">
               <div className="flex items-start justify-between">
                 <Link to="/patients/$patientId" params={{ patientId: p.id }} className="flex items-center gap-3 group">
                   <div className="h-11 w-11 rounded-full bg-primary-soft text-primary flex items-center justify-center font-semibold">
@@ -88,15 +89,13 @@ function PatientsPage() {
                 <div className="font-medium">{p.currentMedications.length}</div>
               </div>
 
-              {p.flags.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {p.flags.map((f) => (
-                    <span key={f} className="inline-flex items-center rounded-full bg-warning-soft text-warning-foreground border border-warning/30 px-2 py-0.5 text-[11px] font-medium">{f}</span>
-                  ))}
-                </div>
-              )}
+              <div className="mt-4 min-h-[26px] flex flex-wrap gap-1.5">
+                {p.flags.map((f) => (
+                  <span key={f} className="inline-flex items-center rounded-full bg-warning-soft text-warning-foreground border border-warning/30 px-2 py-0.5 text-[11px] font-medium">{f}</span>
+                ))}
+              </div>
 
-              <div className="mt-5 grid grid-cols-4 gap-2">
+              <div className="mt-auto pt-5 grid grid-cols-4 gap-2">
                 <button onClick={() => navigate({ to: "/prescription/new", search: { patientId: p.id } })} className="col-span-2 inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-smooth">
                   <FilePlus2 className="h-3.5 w-3.5" /> New Rx
                 </button>
@@ -115,6 +114,21 @@ function PatientsPage() {
             </div>
           ))}
         </div>
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between pt-2">
+            <div className="text-xs text-muted-foreground">
+              Showing {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, filtered.length)} of {filtered.length}
+            </div>
+            <div className="flex items-center gap-1">
+              <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1} className="rounded-lg border border-input bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                <button key={n} onClick={() => setPage(n)} className={`min-w-[32px] rounded-lg border px-2 py-1.5 text-xs font-semibold ${n === currentPage ? "bg-primary text-primary-foreground border-primary" : "border-input bg-card hover:bg-muted"}`}>{n}</button>
+              ))}
+              <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="rounded-lg border border-input bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+            </div>
+          </div>
+        )}
+        </>
       )}
 
       <PatientFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} editing={editing} />
