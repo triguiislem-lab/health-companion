@@ -23,35 +23,37 @@ function PrescriptionReview() {
         </button>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 items-stretch">
         {prescriptions.map((rx) => {
           const p = patients.find((x) => x.id === rx.patientId);
           const stMeta = statusMeta[rx.status];
           const rkMeta = riskMeta[rx.risk];
           return (
-            <div key={rx.id} className="rounded-xl border border-border bg-card shadow-card p-5">
+            <div key={rx.id} className="flex flex-col h-full rounded-xl border border-border bg-card shadow-card p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-xs text-muted-foreground font-mono">{rx.id} · {rx.lastUpdate}</div>
                   <div className="font-semibold mt-0.5">{p?.name ?? "Unknown patient"} {p && <span className="text-muted-foreground font-normal">({p.age}{p.sex})</span>}</div>
                   <div className="text-sm text-muted-foreground mt-1">{rx.diagnosis}</div>
                 </div>
-                <div className="flex flex-col items-end gap-1.5">
+                <div className="flex flex-col items-end gap-1.5 shrink-0">
                   <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold ${stMeta.cls}`}>{stMeta.label}</span>
                   <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold ${rkMeta.cls}`}>{rkMeta.label}</span>
                 </div>
               </div>
-              {rx.medications.length > 0 && (
-                <ul className="mt-4 space-y-1.5">
-                  {rx.medications.map((m) => (
-                    <li key={m.id} className="flex justify-between text-xs rounded-md bg-muted/50 px-2.5 py-1.5">
-                      <span className="font-medium">{m.name}</span>
-                      <span className="text-muted-foreground">{m.dose} · {m.frequency} · {m.duration}</span>
+              <ul className="mt-4 space-y-1.5 min-h-[40px]">
+                {rx.medications.length > 0 ? (
+                  rx.medications.map((m) => (
+                    <li key={m.id} className="flex justify-between gap-3 text-xs rounded-md bg-muted/50 px-2.5 py-1.5">
+                      <span className="font-medium truncate">{m.name}</span>
+                      <span className="text-muted-foreground shrink-0">{m.dose} · {m.frequency} · {m.duration}</span>
                     </li>
-                  ))}
-                </ul>
-              )}
-              <div className="mt-4 flex items-center justify-between">
+                  ))
+                ) : (
+                  <li className="text-xs text-muted-foreground italic px-2.5 py-1.5">No medications yet</li>
+                )}
+              </ul>
+              <div className="mt-auto pt-4 flex items-center justify-between">
                 <div className="text-xs text-muted-foreground">{rx.doctor}</div>
                 <Link to="/prescription/new" search={p ? { patientId: p.id } : {}} className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-smooth">
                   Open <ArrowRight className="h-3 w-3" />
