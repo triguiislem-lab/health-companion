@@ -20,12 +20,18 @@ function PatientsPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Patient | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Patient | null>(null);
+  const [page, setPage] = useState(1);
+  const pageSize = 9;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return patients;
     return patients.filter((p) => p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q));
   }, [patients, query]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className="p-4 lg:p-8 space-y-6">
