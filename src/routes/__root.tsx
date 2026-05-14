@@ -1,5 +1,5 @@
 import { Outlet, Link, Navigate, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Pill, ScrollText, Settings, Stethoscope, Bell, Search, CalendarClock, LogOut, Building2, GitPullRequest } from "lucide-react";
+import { LayoutDashboard, Users, FilePlus2, ClipboardCheck, Activity, Pill, ScrollText, Settings, Stethoscope, Bell, Search, CalendarClock, LogOut, Building2, GitPullRequest, Shield } from "lucide-react";
 import appCss from "../styles.css?url";
 import { useAuthStore } from "@/lib/stores/auth-store";
 
@@ -16,6 +16,7 @@ const nav: NavItem[] = [
   { to: "/medicines", label: "Médicaments TN", icon: Pill },
   { to: "/medicine-contributions", label: "Contributions", icon: GitPullRequest },
   { to: "/audit", label: "Reports & Audit", icon: ScrollText },
+  { to: "/admin", label: "Admin Console", icon: Shield },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -70,7 +71,7 @@ function Sidebar() {
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
 
   return (
-    <aside className="hidden lg:flex w-64 flex-col border-r border-sidebar-border bg-sidebar">
+    <aside className="hidden lg:flex w-64 flex-col border-r border-sidebar-border bg-sidebar sticky top-0 h-screen">
       <div className="flex items-center gap-2.5 px-5 h-16 border-b border-sidebar-border">
         <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-card">
           <Stethoscope className="h-5 w-5" />
