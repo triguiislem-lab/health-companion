@@ -70,7 +70,7 @@ function Sidebar() {
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
 
   return (
-    <aside className="hidden lg:flex w-64 flex-col border-r border-sidebar-border bg-sidebar">
+    <aside className="hidden lg:flex w-64 flex-col border-r border-sidebar-border bg-sidebar sticky top-0 h-screen">
       <div className="flex items-center gap-2.5 px-5 h-16 border-b border-sidebar-border">
         <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-card">
           <Stethoscope className="h-5 w-5" />
