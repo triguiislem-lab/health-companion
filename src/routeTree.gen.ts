@@ -17,6 +17,7 @@ import { Route as MedicineContributionsRouteImport } from './routes/medicine-con
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InteractionsRouteImport } from './routes/interactions'
 import { Route as AuditRouteImport } from './routes/audit'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ConsultationsIndexRouteImport } from './routes/consultations.index'
 import { Route as PrescriptionReviewRouteImport } from './routes/prescription.review'
@@ -65,6 +66,11 @@ const AuditRoute = AuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -105,6 +111,7 @@ const PrescriptionRxIdOrdonnanceRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/login': typeof LoginRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/login': typeof LoginRoute
@@ -140,6 +148,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/audit': typeof AuditRoute
   '/interactions': typeof InteractionsRoute
   '/login': typeof LoginRoute
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/audit'
     | '/interactions'
     | '/login'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/audit'
     | '/interactions'
     | '/login'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/audit'
     | '/interactions'
     | '/login'
@@ -211,6 +223,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AuditRoute: typeof AuditRoute
   InteractionsRoute: typeof InteractionsRoute
   LoginRoute: typeof LoginRoute
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -350,6 +370,7 @@ const PatientsRouteWithChildren = PatientsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AuditRoute: AuditRoute,
   InteractionsRoute: InteractionsRoute,
   LoginRoute: LoginRoute,
