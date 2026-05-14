@@ -16,6 +16,7 @@ const nav: NavItem[] = [
   { to: "/medicines", label: "Médicaments TN", icon: Pill },
   { to: "/medicine-contributions", label: "Contributions", icon: GitPullRequest },
   { to: "/audit", label: "Reports & Audit", icon: ScrollText },
+  { to: "/admin", label: "Admin Console", icon: Shield },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
